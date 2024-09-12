@@ -15,8 +15,8 @@
     <guid>
         {{- .Page.Permalink -}}
     </guid>
-    <description>
-        <turbo:content>
+    <turbo:content>
+        <description>
             {{- "<![CDATA[" | safeHTML -}}
             {{- with $params.featuredimage -}}
                 <div class="featured-image">
@@ -32,7 +32,7 @@
                 {{- end -}}
             {{- end -}}
             {{- $content | replaceRE `<figure[^>]*>.*</figure>` "" | replaceRE `<img[^>]*( /)?>` "" | safeHTML -}}
-            {{- "]]>" | safeHTML -}}
-        </turbo:content>
-    </description>
+            {{- "]]>" | safeHTML -}}  
+        </description>
+    </turbo:content>
 </item>
