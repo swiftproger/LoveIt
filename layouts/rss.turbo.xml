@@ -1,0 +1,9 @@
+{{- range .Site.RegularPages }}
+  <item turbo=true>
+    <title>{{ .Title }}</title>
+    <link>{{ .Permalink }}</link>
+    <turbo:content><![CDATA[
+      {{ .Content }}
+    ]]></turbo:content>
+  </item>
+{{- end }}
