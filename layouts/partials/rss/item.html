@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0" xmlns:turbo="http://turbo.yandex.ru">
+<rss version="2.0" xmlns:turbo="http://turbo.yandex.ru" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{{ .Site.Title }}</title>
-    <link>{{ .Site.BaseURL }}</link>
-    <description>{{ .Site.Params.description }}</description>
+    <title>SwiftApp</title>
+    <link>https://swiftapp.ru/</link>
+    <description>iOS Developer blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru</language>
+    <managingEditor>swiftapp@mail.ru (AleksandR)</managingEditor>
+    <webMaster>swiftapp@mail.ru (AleksandR)</webMaster>
+    <lastBuildDate>{{ now.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</lastBuildDate>
+    <atom:link href="https://swiftapp.ru/index.xml" rel="self" type="application/rss+xml"/>
+
     {{ range .Pages }}
-      <item turbo="true">
-        <title>{{ .Title }}</title>
-        <link>{{ .Permalink }}</link>
-        <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>
-        <author>{{ .Params.author | default "Неизвестный автор" }}</author>
-        <guid>{{ .Permalink }}</guid>
-        <description>
-          <turbo:content>
-            <![CDATA[
-              {{- with .Params.featuredimage -}}
-                <div class="featured-image">
-                  <img src="{{ . | relURL }}" referrerpolicy="no-referrer">
-                </div>
-              {{- end -}}
-              {{- if .Params.rssFullText -}}
-                {{ .Content }}
-              {{- else -}}
-                {{ .Summary }}
-              {{- end -}}
-            ]]>
-          </turbo:content>
-        </description>
-      </item>
+    <item turbo="true">
+      <title>{{ .Title }}</title>
+      <link>{{ .Permalink }}</link>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>
+      <author>{{ .Params.author | default "Неизвестный автор" }}</author>
+      <guid>{{ .Permalink }}</guid>
+      <description>
+        <turbo:content>
+          <![CDATA[
+          {{ with .Params.featuredimage }}
+            <div class="featured-image">
+              <img src="{{ . | relURL }}" referrerpolicy="no-referrer">
+            </div>
+          {{ end }}
+          {{ if .Params.rssFullText }}
+            {{ .Content }}
+          {{ else }}
+            {{ .Summary }}
+          {{ end }}
+          ]]>
+        </turbo:content>
+      </description>
+    </item>
     {{ end }}
+
   </channel>
 </rss>
