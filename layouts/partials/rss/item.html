@@ -1,41 +1,36 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0" xmlns:turbo="http://turbo.yandex.ru" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>SwiftApp</title>
-    <link>https://swiftapp.ru/</link>
-    <description>iOS Developer blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>ru</language>
-    <managingEditor>swiftapp@mail.ru (AleksandR)</managingEditor>
-    <webMaster>swiftapp@mail.ru (AleksandR)</webMaster>
-    <lastBuildDate>{{ now.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</lastBuildDate>
-    <atom:link href="https://swiftapp.ru/index.xml" rel="self" type="application/rss+xml"/>
-
-    {{ range .Pages }}
-    <item turbo="true">
-      <title>{{ .Title }}</title>
-      <link>{{ .Permalink }}</link>
-      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>
-      <author>{{ .Params.author | default "Неизвестный автор" }}</author>
-      <guid>{{ .Permalink }}</guid>
-      <description>
-        <turbo:content>
-          <![CDATA[
-          {{ with .Params.featuredimage }}
+{{- $params := .Page.Params | merge .Site.Params.Page | merge (dict "author" .Site.Author.name) -}}
+<item >
+    <title>
+        {{- .Page.Title -}}
+    </title>
+    <link>
+        {{- .Page.Permalink -}}
+    </link>
+    <pubDate>
+        {{- .Page.Date.Format "Mon, 02 Jan 2006 15:04:05 -0700"  -}}
+    </pubDate>
+    <author>
+        {{- $params.author | default (T "author") -}}
+    </author>
+    <guid>
+        {{- .Page.Permalink -}}
+    </guid>
+    <description>
+        {{- "<![CDATA[" | safeHTML -}}
+        {{- with $params.featuredimage -}}
             <div class="featured-image">
-              <img src="{{ . | relURL }}" referrerpolicy="no-referrer">
+                <img src="{{ . | relURL }}" referrerpolicy="no-referrer">
             </div>
-          {{ end }}
-          {{ if .Params.rssFullText }}
-            {{ .Content }}
-          {{ else }}
-            {{ .Summary }}
-          {{ end }}
-          ]]>
-        </turbo:content>
-      </description>
-    </item>
-    {{ end }}
-
-  </channel>
-</rss>
+        {{- end -}}
+        {{- $content := .Page.Description -}}
+        {{- if $params.rssFullText -}}
+            {{- $content = dict "Content" .Page.Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" -}}
+        {{- else -}}
+            {{- with .Page.Summary -}}
+                {{- $content = dict "Content" . "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" -}}
+            {{- end -}}
+        {{- end -}}
+        {{- $content | replaceRE `<figure[^>]*>.*</figure>` "" | replaceRE `<img[^>]*( /)?>` "" | safeHTML -}}
+        {{- "]]>" | safeHTML -}}
+    </description>
+</item>
