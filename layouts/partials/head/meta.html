@@ -1,18 +1,6 @@
 {{- $params := .Scratch.Get "params" -}}
 
-{{- if .IsHome -}}
-    <meta name="Description" content="{{ .Site.Params.homeDescription | default .Site.Params.description }}">
-{{- else if .IsPage -}}
-    <meta name="Description" content="{{ .Params.description | default .Site.Params.description }}">
-{{- else if .IsSection -}}
-    <meta name="Description" content="{{ .Params.description | default (printf "Посты в категории %s" .Title) }}">
-{{- else if eq .Kind "taxonomy" -}}
-    <meta name="Description" content="{{ printf "Список материалов по %s" .Title | default .Site.Params.description }}">
-{{- else if eq .Kind "taxonomyTerm" -}}
-    <meta name="Description" content="{{ printf "Категории и теги для %s" .Title | default .Site.Params.description }}">
-{{- else -}}
-    <meta name="Description" content="{{ .Site.Params.description }}">
-{{- end }}
+<meta name="Description" content="{{ $params.description | default .Site.Params.description }}">
 
 {{- template "_internal/opengraph.html" . -}}
 {{- template "_internal/twitter_cards.html" . -}}
