@@ -1,6 +1,21 @@
 {{- $params := .Scratch.Get "params" -}}
 
-<meta name="Description" content="{{ $params.description | default .Site.Params.description }}">
+{{- /* Мета-описание */ -}}
+{{- if .Params.description }}
+    <meta name="description" content="{{ .Params.description }}">
+{{- else if .IsTaxonomy }}
+    {{- if eq .Kind "tags" }}
+        <meta name="description" content="Статьи по тегу {{ .Title }} на {{ .Site.Title }}">
+    {{- else if eq .Kind "categories" }}
+        <meta name="description" content="Статьи в категории {{ .Title }} на {{ .Site.Title }}">
+    {{- else }}
+        <meta name="description" content="Раздел {{ .Title }} на {{ .Site.Title }}">
+    {{- end }}
+{{- else if .IsPage }}
+    <meta name="description" content="{{ .Params.description | default .Site.Params.description }}">
+{{- else }}
+    <meta name="description" content="{{ .Site.Params.description }}">
+{{- end }}
 
 {{- template "_internal/opengraph.html" . -}}
 {{- template "_internal/twitter_cards.html" . -}}
