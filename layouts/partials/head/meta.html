@@ -6,9 +6,9 @@
     <meta name="Description" content="{{ .Params.description | default .Site.Params.description }}">
 {{- else if .IsSection -}}
     <meta name="Description" content="{{ .Params.description | default (printf "Посты в категории %s" .Title) }}">
-{{- else if .IsTaxonomy -}}
+{{- else if eq .Kind "taxonomy" -}}
     <meta name="Description" content="{{ printf "Список материалов по %s" .Title | default .Site.Params.description }}">
-{{- else if .IsTaxonomyTerm -}}
+{{- else if eq .Kind "taxonomyTerm" -}}
     <meta name="Description" content="{{ printf "Категории и теги для %s" .Title | default .Site.Params.description }}">
 {{- else -}}
     <meta name="Description" content="{{ .Site.Params.description }}">
