@@ -1,17 +1,17 @@
-{{- if .Params.description }}
-    <meta name="description" content="{{ .Params.description }}">
-{{- else if eq .Kind "taxonomyTerm" }}
-    {{- if eq .Section "tags" }}
-        <meta name="description" content="Статьи по тегу {{ .Title }} на {{ .Site.Title }}">
-    {{- else if eq .Section "categories" }}
-        <meta name="description" content="Статьи в категории {{ .Title }} на {{ .Site.Title }}">
-    {{- else }}
-        <meta name="description" content="Раздел {{ .Title }} на {{ .Site.Title }}">
-    {{- end }}
-{{- else if .IsPage }}
-    <meta name="description" content="{{ .Params.description | default .Site.Params.description }}">
-{{- else }}
-    <meta name="description" content="{{ .Site.Params.description }}">
+{{- $params := .Scratch.Get "params" -}}
+
+{{- if .IsHome -}}
+    <meta name="Description" content="{{ .Site.Params.homeDescription | default .Site.Params.description }}">
+{{- else if .IsPage -}}
+    <meta name="Description" content="{{ .Params.description | default .Site.Params.description }}">
+{{- else if .IsSection -}}
+    <meta name="Description" content="{{ .Params.description | default (printf "Посты в категории %s" .Title) }}">
+{{- else if .IsTaxonomy -}}
+    <meta name="Description" content="{{ printf "Список материалов по %s" .Title | default .Site.Params.description }}">
+{{- else if .IsTaxonomyTerm -}}
+    <meta name="Description" content="{{ printf "Категории и теги для %s" .Title | default .Site.Params.description }}">
+{{- else -}}
+    <meta name="Description" content="{{ .Site.Params.description }}">
 {{- end }}
 
 {{- template "_internal/opengraph.html" . -}}
@@ -20,10 +20,10 @@
 <meta name="application-name" content="{{ .Site.Params.app.title | default .Site.Title }}">
 <meta name="apple-mobile-web-app-title" content="{{ .Site.Params.app.title | default .Site.Title }}">
 
-{{- with .Site.Params.app.themeColor }}
+{{- with .Site.Params.app.themeColor -}}
     <meta name="theme-color" content="{{ . }}">
-{{- end }}
+{{- end -}}
 
-{{- with .Site.Params.app.tileColor }}
+{{- with .Site.Params.app.tileColor -}}
     <meta name="msapplication-TileColor" content="{{ . }}">
-{{- end }}
+{{- end -}}
