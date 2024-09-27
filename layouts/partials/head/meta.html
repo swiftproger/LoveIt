@@ -3,10 +3,10 @@
 {{- /* Мета-описание */ -}}
 {{- if .Params.description }}
     <meta name="description" content="{{ .Params.description }}">
-{{- else if .IsTaxonomy }}
-    {{- if eq .Kind "tags" }}
+{{- else if eq .Kind "taxonomyTerm" }}
+    {{- if eq .Section "tags" }}
         <meta name="description" content="Статьи по тегу {{ .Title }} на {{ .Site.Title }}">
-    {{- else if eq .Kind "categories" }}
+    {{- else if eq .Section "categories" }}
         <meta name="description" content="Статьи в категории {{ .Title }} на {{ .Site.Title }}">
     {{- else }}
         <meta name="description" content="Раздел {{ .Title }} на {{ .Site.Title }}">
